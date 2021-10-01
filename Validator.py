@@ -16,6 +16,8 @@ class Validator:
         "Texas" : "TX", "United States Minor Outlying Islands" : "UM", "US Virgin Islands" : "VI", "Utah" : "UT", "Vermont" : "VT", "Virginia" : "VA",
         "Washington" : "WA", "West Virginia" : "WV", "Wisconsin" : "WI", "Wyoming" : "WY", "" : ""
     }
+    
+    bad_npi = ["0", "9999999999"]
 
     def __init__(self, debug=False, logfile=""):
         self.npi_valid = False
@@ -28,7 +30,8 @@ class Validator:
 
     def query_registry(self, npi):
 
-        if npi == "0":
+        # Skip if known bad value
+        if npi in self.bad_npi:
             self.npi_valid = False
             if self.debug:
                 self.logfile.write(f"\n{datetime.now()} - NPI entry {npi} is invalid. Skipping query.")
