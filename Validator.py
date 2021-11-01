@@ -1,6 +1,7 @@
 import requests
 import json
 from datetime import datetime
+import os
 
 class Validator:
 
@@ -25,7 +26,11 @@ class Validator:
         self.address_valid = False
         self.debug = debug
         if logfile:
-            self.logfile = open(logfile, "w")
+            if os.path.exists('logs/'):
+                self.logfile = open(logfile, "w")
+            else:
+                os.mkdir('logs')
+                self.logfile = open(logfile, "w")
         self.validation_error = False
 
     def query_registry(self, npi):
@@ -34,7 +39,7 @@ class Validator:
         if npi in self.bad_npi:
             self.npi_valid = False
             if self.debug:
-                self.logfile.write(f"\n{datetime.now()} - NPI entry {npi} is invalid. Skipping query.")
+                self.logfile.write(f"\n{datetime.now()} - NPI entry {npi} is invalid. Skipping query.\n")
         else:
 
             # API call to NPI registry
